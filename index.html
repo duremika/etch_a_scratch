@@ -1,10 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Волшебный Экран</title>
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script src="lib/phaser.min.js"></script>
+    <!-- Yandex Games SDK -->
+    <script src="/sdk.js"></script>
     <style>
         body {
             margin: 0;
@@ -19,6 +21,10 @@
             height: 100vh;
         }
     </style>
+    <meta http-equiv="Content-Security-Policy"
+          content="script-src 'self' yandex.ru *.yandex.ru yastatic.net 'unsafe-eval';
+               img-src 'self' data: https: blob:;
+               media-src 'self' data: https: blob:">
 </head>
 <body>
     <div id="game-container"></div>

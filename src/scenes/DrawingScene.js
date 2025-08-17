@@ -12,6 +12,7 @@ export class DrawingScene extends Phaser.Scene {
         this.speed = 1;
         this.keys = null;
         this.isMoving = false;
+        this.lastAdTime = Date.now();
     }
 
     preload() {
@@ -32,6 +33,10 @@ export class DrawingScene extends Phaser.Scene {
         this.setupControls();
         this.setupEventListeners();
         this.setupSound();
+
+        if (this.sys.game.device.input.touch) {
+            this.input.addPointer(3);
+        }
     }
 
     initYandexSDK() {
@@ -77,9 +82,10 @@ export class DrawingScene extends Phaser.Scene {
     setupControls() {
         this.keys = this.input.keyboard.createCursorKeys();
 
-        this.input.keyboard.on('keydown-SPACE', () => this.eraseButton.handleErase());
-
         this.eraseButton = new EraseButton(this);
+        ['SPACE', 'ENTER', 'OK'].forEach(key => {
+            this.input.keyboard.on(`keydown-${key}`, () => this.eraseButton.handleErase());
+        });
 
         this.leftButton = new ControlButton(
             this,
@@ -99,15 +105,14 @@ export class DrawingScene extends Phaser.Scene {
 
         this.upButton = new ControlButton(
             this,
-            this.cameras.main.width + BUTTONS.ERASE.x,
+            this.cameras.main.width - BUTTONS.ARROWS.x,
             BUTTONS.ARROWS.y,
             'upButton',
             'up'
         );
-
         this.downButton = new ControlButton(
             this,
-            this.cameras.main.width + BUTTONS.ERASE.x,
+            this.cameras.main.width - BUTTONS.ARROWS.x,
             BUTTONS.ARROWS.y + 250,
             'downButton',
             'down'

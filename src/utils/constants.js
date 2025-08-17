@@ -1,4 +1,4 @@
-export const ORIGINAL_SIZE = {
+﻿export const ORIGINAL_SIZE = {
     WIDTH: 1420,
     HEIGHT: 800
 };
@@ -12,7 +12,7 @@ export const DRAWING_AREA = {
 
 export const BUTTONS = {
     ERASE: {
-        x: -115,
+        x: 115,
         y: 150,
         scale: 0.08,
         hoverScale: 0.09

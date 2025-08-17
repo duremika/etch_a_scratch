@@ -6,7 +6,7 @@ export class EraseButton {
         this.sound = scene.sound.get('eraseSound') || scene.sound.add('eraseSound', SOUNDS.ERASE);
 
         scene.add.circle(
-            scene.cameras.main.width + BUTTONS.ERASE.x,
+            scene.cameras.main.width - BUTTONS.ERASE.x,
             BUTTONS.ERASE.y,
             50,
             0xffffff,
@@ -14,7 +14,7 @@ export class EraseButton {
         ).setDepth(4);
 
         this.button = scene.add.image(
-            scene.cameras.main.width + BUTTONS.ERASE.x,
+            scene.cameras.main.width - BUTTONS.ERASE.x,
             BUTTONS.ERASE.y,
             'eraseButton'
         )
@@ -29,14 +29,31 @@ export class EraseButton {
     handleErase() {
         this.scene.line.clear();
         this.sound.play();
-        if (typeof YaGames !== 'undefined') {
-            this.scene.ysdk.adv.showFullscreenAdv();
+
+        if (!this.scene.lastAdTime || Date.now() - this.scene.lastAdTime > 61000) {
+            if (typeof YaGames !== 'undefined' && this.scene.ysdk?.adv) {
+                this.scene.ysdk.adv.showFullscreenAdv(
+                    {
+                        callbacks: {
+                            onOpen: () => {
+                                this.scene.lastAdTime = Date.now();
+                                this.scene.ysdk.features.GameplayAPI?.stop();
+                            },
+                            onClose: () => {
+                                this.scene.ysdk.features.GameplayAPI?.start();
+                            },
+                            onError: (e) => {
+                                console.log('Error while open video ad:', e);
+                            },
+                        }
+                    });
+            }
         }
     }
 
     updatePosition(gameSize) {
         this.button.setPosition(
-            gameSize.width + BUTTONS.ERASE.x,
+            gameSize.width - BUTTONS.ERASE.x,
             BUTTONS.ERASE.y
         );
     }
