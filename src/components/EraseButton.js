@@ -1,4 +1,4 @@
-import { BUTTONS, SOUNDS } from '../utils/constants.js';
+﻿import { BUTTONS, SOUNDS } from '../utils/constants.js';
 
 export class EraseButton {
     constructor(scene) {
@@ -29,6 +29,9 @@ export class EraseButton {
     handleErase() {
         this.scene.line.clear();
         this.sound.play();
+        if (typeof YaGames !== 'undefined') {
+            this.scene.ysdk.adv.showFullscreenAdv();
+        }
     }
 
     updatePosition(gameSize) {

@@ -1,4 +1,4 @@
-import { ORIGINAL_SIZE, DRAWING_AREA, BUTTONS, SOUNDS } from '../utils/constants.js';
+﻿import { ORIGINAL_SIZE, DRAWING_AREA, BUTTONS, SOUNDS } from '../utils/constants.js';
 import { calculateDrawingArea } from '../utils/helpers.js';
 import { EraseButton } from '../components/EraseButton.js';
 import { ControlButton } from '../components/ControlButton.js';
@@ -36,7 +36,11 @@ export class DrawingScene extends Phaser.Scene {
 
     initYandexSDK() {
         if (typeof YaGames !== 'undefined') {
-            YaGames.init().then(ysdk => this.ysdk = ysdk);
+            YaGames.init().then(ysdkInstance => {
+                this.ysdk = ysdkInstance;
+                this.ysdk.adv.showFullscreenAdv();
+                this.ysdk.features.LoadingAPI.ready();
+            });
         }
     }
 
@@ -73,10 +77,7 @@ export class DrawingScene extends Phaser.Scene {
     setupControls() {
         this.keys = this.input.keyboard.createCursorKeys();
 
-        this.input.keyboard.on('keydown-SPACE', () => {
-            this.line.clear();
-            this.sound.get('eraseSound').play();
-        });
+        this.input.keyboard.on('keydown-SPACE', () => this.eraseButton.handleErase());
 
         this.eraseButton = new EraseButton(this);
 
